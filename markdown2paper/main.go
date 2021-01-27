@@ -53,6 +53,17 @@ type BuildParams struct {
 
 // Build actually builds the paper
 func Build(params BuildParams) error {
-	log.Printf("%+v", params)
+  log.Printf("%+v", params)
+  outlineContents, err := ReadFileToText(params.OutlineFile)
+  if err != nil {
+    return err
+  }
+  sections, err := ParseTextToMarkdown("", outlineContents, 0)
+  if err != nil {
+    return err
+  }
+
+  log.Printf("%+v", sections)
+
 	return nil
 }
