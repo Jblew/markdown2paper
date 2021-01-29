@@ -13,15 +13,20 @@ type BuildParams struct {
 
 // Build actually builds the paper
 func Build(params BuildParams) error {
-  outMarkdown := MarkdownSection{}
+  outMarkdown := MarkdownSection{Sections: []MarkdownSection{{}}}
 
-	outlineMarkdown, err := extractMarkdownSectionFromFile(params.OutlineFile, "Outline")
+	outlineMarkdown, err := loadMarkdownFromFile(params.OutlineFile)
 	if err != nil {
 		return err
 	}
 
-	outMarkdown.Sections = append(outMarkdown.Sections, MarkdownSection{Title:"A final paper", Sections: []MarkdownSection{outlineMarkdown}})
+	outlineSectionMarkdown, err := extractMarkdownSection(outlineMarkdown, "Outline")
+	if err != nil {
+		return err
+	}
 
+	outMarkdown.Sections[0].Sections = []MarkdownSection{outlineSectionMarkdown}
+	outMarkdown.Sections[0].Title = outlineMarkdown.Sections[0].Title
   return WriteTextToFile(params.OutFile, MarkdownToText(outMarkdown, 0))
 }
 
@@ -31,11 +36,16 @@ func extractMarkdownSectionFromFile(path string, sectionTitle string) (MarkdownS
 		return MarkdownSection{}, err
 	}
 
+	return extractMarkdownSection(markdown, sectionTitle)
+}
+
+
+func extractMarkdownSection(markdown MarkdownSection, sectionTitle string) (MarkdownSection, error) {
 	found, section := FindTopFirstSectionWithTitle(markdown, sectionTitle)
 	if found == true {
 		return section, nil
 	}
-	return MarkdownSection{}, fmt.Errorf("Section named \"%s\" not found in %s", sectionTitle, path)
+	return MarkdownSection{}, fmt.Errorf("Section named \"%s\" not found", sectionTitle)
 }
 
 

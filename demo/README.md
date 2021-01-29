@@ -1,4 +1,4 @@
-# Paper
+# Awesome paper
 
 ## TODO
 
