@@ -27,7 +27,8 @@ func Build(params BuildParams) error {
 
 	outMarkdown.Sections[0].Sections = []MarkdownSection{outlineSectionMarkdown}
 	outMarkdown.Sections[0].Title = outlineMarkdown.Sections[0].Title
-  return WriteTextToFile(params.OutFile, MarkdownToText(outMarkdown, 0))
+	textOut := MarkdownToText(outMarkdown, 0)
+  return WriteTextToFile(params.OutFile, textOut)
 }
 
 func extractMarkdownSectionFromFile(path string, sectionTitle string) (MarkdownSection, error) {
