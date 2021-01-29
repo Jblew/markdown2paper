@@ -58,6 +58,20 @@ func MarkdownToText(section MarkdownSection, level int) string {
 	return out
 }
 
+// FindTopFirstSectionWithTitle searches top-down by hierarchy for the top-hierarchy section of a title
+func FindTopFirstSectionWithTitle(section MarkdownSection, searchHeading string) (bool, MarkdownSection) {
+	if section.Title == searchHeading {
+		return true, section
+	}
+	for _, subsection := range section.Sections {
+		found, matchedSection := FindTopFirstSectionWithTitle(subsection, searchHeading)
+		if found == true {
+			return true, matchedSection
+		}
+	}
+	return false, MarkdownSection{}
+}
+
 func splitByHeadings(contents string, level int) []string {
 	lines := strings.Split(contents, "\n")
 	out := []string{}

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"log"
 	"os"
 
@@ -43,36 +42,4 @@ func main() {
   if err != nil {
     log.Fatal(err)
   }
-}
-
-// BuildParams — parameters for building
-type BuildParams struct {
-	BibFile string
-	OutlineFile string
-	OutFile string
-}
-
-// Build actually builds the paper
-func Build(params BuildParams) error {
-  log.Printf("%+v", params)
-  outlineContents, err := ReadFileToText(params.OutlineFile)
-  if err != nil {
-    return err
-  }
-  rootSection, err := ParseTextToMarkdown("", outlineContents, 0)
-  if err != nil {
-    return err
-  }
-
-  log.Printf("%+v", rootSection)
-
-  debugJSONOut, err := json.MarshalIndent(rootSection, "", "    ")
-  if err != nil {
-    return err
-  }
-  log.Printf("%s", string(debugJSONOut))
-
-  out := MarkdownToText(rootSection, 0)
-
-  return WriteTextToFile(params.OutFile, out)
 }
