@@ -59,18 +59,20 @@ func Build(params BuildParams) error {
   if err != nil {
     return err
   }
-  sections, err := ParseTextToMarkdown("", outlineContents, 0)
+  rootSection, err := ParseTextToMarkdown("", outlineContents, 0)
   if err != nil {
     return err
   }
 
-  log.Printf("%+v", sections)
+  log.Printf("%+v", rootSection)
 
-  out, err := json.MarshalIndent(sections, "", "    ")
+  debugJSONOut, err := json.MarshalIndent(rootSection, "", "    ")
   if err != nil {
     return err
   }
-  log.Printf("%s", string(out))
+  log.Printf("%s", string(debugJSONOut))
 
-	return nil
+  out := MarkdownToText(rootSection, 0)
+
+  return WriteTextToFile(params.OutFile, out)
 }

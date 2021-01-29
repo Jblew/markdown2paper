@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -33,6 +34,28 @@ func ParseTextToMarkdown(title string, contents string, baseLevel int) (Markdown
 		Content: contentAboveHeadings,
 		Sections: sections,
 	}, nil
+}
+
+// MarkdownToText converts markdown to text
+func MarkdownToText(section MarkdownSection, level int) string {
+	out := ""
+	if level > 0 && len(section.Title) > 0 {
+		out += makeHeading(section.Title, level) + "\n\n"
+	}
+
+	if len(section.Content) > 0 {
+		out += section.Content + "\n\n"
+	}
+
+	for _, subsection := range section.Sections {
+		out += MarkdownToText(subsection, level + 1)
+	}
+
+	if level > 0 && len(section.Sections) == 0 {
+		out += "\n\n"
+	}
+
+	return out
 }
 
 func splitByHeadings(contents string, level int) []string {
@@ -86,4 +109,8 @@ func getLineHeadingLevel(line string) int {
 
 func getLineHeadingText(line string) string {
 	return strings.Trim(line, "# \n")
+}
+
+func makeHeading(title string, level int) string {
+	return fmt.Sprintf("%s %s", strings.Repeat("#", level), title)
 }
