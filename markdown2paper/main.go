@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 	"os"
 
@@ -64,6 +65,12 @@ func Build(params BuildParams) error {
   }
 
   log.Printf("%+v", sections)
+
+  out, err := json.MarshalIndent(sections, "", "    ")
+  if err != nil {
+    return err
+  }
+  log.Printf("%s", string(out))
 
 	return nil
 }

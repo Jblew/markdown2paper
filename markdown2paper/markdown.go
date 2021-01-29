@@ -1,6 +1,8 @@
 package main
 
-import "strings"
+import (
+	"strings"
+)
 
 // MarkdownSection is a section in a document
 type MarkdownSection struct {
@@ -16,9 +18,14 @@ func ParseTextToMarkdown(title string, contents string, baseLevel int) (Markdown
 	if len(contentsAndHeadings) > 0 {
 		contentAboveHeadings = contentsAndHeadings[0]
 	}
-	sections, err := contentsAndHeadingsToSections(contentsAndHeadings, baseLevel + 1)
-	if err != nil {
-		return MarkdownSection{}, err
+
+	sections := []MarkdownSection{}
+	if len(contentsAndHeadings) > 1 {
+		sectionsOfContent, err := contentsAndHeadingsToSections(contentsAndHeadings, baseLevel + 1)
+		sections = sectionsOfContent
+		if err != nil {
+			return MarkdownSection{}, err
+		}
 	}
 
 	return MarkdownSection{
@@ -49,9 +56,8 @@ func splitByHeadings(contents string, level int) []string {
 }
 
 func contentsAndHeadingsToSections(contentsAndHeadings []string, level int) ([]MarkdownSection, error) {
-	i := 1
 	sections := []MarkdownSection{}
-	for i < len(contentsAndHeadings) {
+	for i:= 1; i < len(contentsAndHeadings);i+=2 {
 		heading := contentsAndHeadings[i]
 		content := ""
 		if (i+1) < len(contentsAndHeadings) {
