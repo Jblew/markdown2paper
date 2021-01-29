@@ -8,7 +8,7 @@ import (
 // OutlineTree is a tree of outline links
 type OutlineTree struct {
 	Title string
-	Path string
+	LinkPath string
 	Children []OutlineTree
 }
 
@@ -41,16 +41,28 @@ func parsePunctorsToOutlineTree(punctors []punctor) []OutlineTree {
 			continue
 		}
 		if currPunctor.Level == baseLevel {
-			children = append(children, OutlineTree{Title: currentChildTitle, Children: parsePunctorsToOutlineTree(currentChildPunctors)})
+			children = append(children, makeNewOutlineChild(currentChildTitle, currentChildPunctors))
 			currentChildTitle = currPunctor.Text
 			currentChildPunctors = []punctor{}
 		} else {
 			currentChildPunctors = append(currentChildPunctors, currPunctor)
 		}
 	}
-	children = append(children, OutlineTree{Title: currentChildTitle, Children: parsePunctorsToOutlineTree(currentChildPunctors)})
+	children = append(children, makeNewOutlineChild(currentChildTitle, currentChildPunctors))
 
 	return children
+}
+
+var linkRe = regexp.MustCompile(`\[([^\]]+)\]\(([^\)]+)\)`)
+func makeNewOutlineChild(text string, childPunctors []punctor) OutlineTree {
+	title := text
+	link := ""
+	submatches := linkRe.FindStringSubmatch(text)
+	if len(submatches) == 3 {
+		title = submatches[1]
+		link = submatches[2]
+	}
+	return OutlineTree{Title: title, LinkPath: link, Children: parsePunctorsToOutlineTree(childPunctors)}
 }
 
 var punctorRe = regexp.MustCompile(`(?m)^([\t ]*)[\d+-.]+[\t ]?(.*)$`)

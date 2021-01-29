@@ -11,7 +11,7 @@
 Here some outline
 
 1. Background
-2. Methods
+2. [Methods](./Methods.md)
 3. Results
    1. Initial results
    2. Round A
