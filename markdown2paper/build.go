@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"path/filepath"
 )
 
 // BuildParams — parameters for building
@@ -13,7 +14,8 @@ type BuildParams struct {
 
 // Build actually builds the paper
 func Build(params BuildParams) error {
-  outMarkdown := MarkdownSection{Sections: []MarkdownSection{{}}}
+	outMarkdown := MarkdownSection{Sections: []MarkdownSection{{}}}
+	baseDir := filepath.Dir(params.OutlineFile)
 
 	outlineMarkdown, err := loadMarkdownFromFile(params.OutlineFile)
 	if err != nil {
@@ -26,7 +28,7 @@ func Build(params BuildParams) error {
 	}
 
 	outlineTree := ParseTextToOutlineTree(outlineSectionMarkdown.Content, 0)
-	paperContents, err := buildPaperContentsForOutline(outlineTree)
+	paperContents, err := buildPaperContentsForOutline(outlineTree, baseDir)
 	if err != nil {
 		return err
 	}
@@ -37,32 +39,40 @@ func Build(params BuildParams) error {
   return WriteTextToFile(params.OutFile, textOut)
 }
 
-func buildPaperContentsForOutline(outlineTree OutlineTree) ([]MarkdownSection, error) {
+func buildPaperContentsForOutline(outlineTree OutlineTree, baseDir string) ([]MarkdownSection, error) {
 	sections := []MarkdownSection{}
 	for _, child := range outlineTree.Children {
-		content, err := fetchOutlineItemContent(child)
+		childContent, loadedSections, err := fetchOutlineItemContent(child, baseDir)
 		if err != nil {
 			return []MarkdownSection{}, err
 		}
-		childSections, err := buildPaperContentsForOutline(child)
+		childSections, err := buildPaperContentsForOutline(child, baseDir)
 		if err != nil {
 			return []MarkdownSection{}, err
 		}
 		section := MarkdownSection{
 			Title: child.Title,
-			Content: content,
-			Sections: childSections,
+			Content: childContent,
+			Sections: append(loadedSections, childSections...),
 		}
 		sections = append(sections, section)
 	}
 	return sections, nil
 }
 
-func fetchOutlineItemContent(item OutlineTree) (string, error) {
+func fetchOutlineItemContent(item OutlineTree, baseDir string) (string, []MarkdownSection, error) {
 	if len(item.LinkPath) == 0 {
-		return "", nil
+		return "", []MarkdownSection{}, nil
 	}
-	return item.LinkPath, nil
+	path, err := filepath.Abs(filepath.Join(baseDir, item.LinkPath))
+	if err != nil {
+		return "", []MarkdownSection{}, err
+	}
+	rootSection, err := extractMarkdownSectionFromFile(path, "Final")
+	if err != nil {
+		return "", []MarkdownSection{}, err
+	}
+	return rootSection.Content ,rootSection.Sections, nil
 }
 
 func extractMarkdownSectionFromFile(path string, sectionTitle string) (MarkdownSection, error) {
