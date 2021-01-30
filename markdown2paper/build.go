@@ -26,7 +26,10 @@ func Build(params BuildParams) error {
 	}
 
 	outlineTree := ParseTextToOutlineTree(outlineSectionMarkdown.Content, 0)
-	paperContents := buildPaperContentsForOutline(outlineTree)
+	paperContents, err := buildPaperContentsForOutline(outlineTree)
+	if err != nil {
+		return err
+	}
 
 	outMarkdown.Sections[0].Sections = paperContents
 	outMarkdown.Sections[0].Title = outlineMarkdown.Sections[0].Title
@@ -34,16 +37,32 @@ func Build(params BuildParams) error {
   return WriteTextToFile(params.OutFile, textOut)
 }
 
-func buildPaperContentsForOutline(outlineTree OutlineTree) []MarkdownSection {
+func buildPaperContentsForOutline(outlineTree OutlineTree) ([]MarkdownSection, error) {
 	sections := []MarkdownSection{}
 	for _, child := range outlineTree.Children {
+		content, err := fetchOutlineItemContent(child)
+		if err != nil {
+			return []MarkdownSection{}, err
+		}
+		childSections, err := buildPaperContentsForOutline(child)
+		if err != nil {
+			return []MarkdownSection{}, err
+		}
 		section := MarkdownSection{
 			Title: child.Title,
-			Sections: buildPaperContentsForOutline(child),
+			Content: content,
+			Sections: childSections,
 		}
 		sections = append(sections, section)
 	}
-	return sections
+	return sections, nil
+}
+
+func fetchOutlineItemContent(item OutlineTree) (string, error) {
+	if len(item.LinkPath) == 0 {
+		return "", nil
+	}
+	return item.LinkPath, nil
 }
 
 func extractMarkdownSectionFromFile(path string, sectionTitle string) (MarkdownSection, error) {
