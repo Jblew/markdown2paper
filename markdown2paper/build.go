@@ -33,7 +33,9 @@ func Build(params BuildParams) error {
 		return err
 	}
 
-	outMarkdown.Sections[0].Sections = paperContents
+	paperContentsWithBibliography := ProcessPandocReferences(paperContents)
+
+	outMarkdown.Sections[0].Sections = paperContentsWithBibliography
 	outMarkdown.Sections[0].Title = outlineMarkdown.Sections[0].Title
 	textOut := MarkdownToText(outMarkdown, 0)
   return WriteTextToFile(params.OutFile, textOut)
