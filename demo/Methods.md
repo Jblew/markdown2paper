@@ -10,7 +10,8 @@ todo
 
 ## Final
 
-Here is the methodology of our work...
+The most common methodology used in our field of research is the one specified by [@Feynman1999]
+Here is the methodology of our work... We used similar methods as [@AnnaDoe2014].
 
 ### Subsection
 
