@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"regexp"
+	"strings"
 )
 
 // ProcessPandocReferences replaces all occurances of pandoc citation keys [@key] with footnotes
@@ -11,14 +12,15 @@ func ProcessPandocReferences(sections []MarkdownSection) []MarkdownSection {
 	bibliographyContent := ""
 
 	for i, key := range citationKeys {
-		bibliographyContent += fmt.Sprintf("%d. %s\n\n", (i+1), key)
+		bibliographyContent += fmt.Sprintf("[^%d]: [@%s]\n\n", (i+1), key)
 	}
 
+	transformedSections := applyFootnotesToSections(sections, citationKeys)
 	bibliography := MarkdownSection{
 		Title: "Bibliography",
 		Content: bibliographyContent,
 	}
-	return append(sections, bibliography)
+	return append(transformedSections, bibliography)
 }
 
 func getCitationKeysOfSections(sections []MarkdownSection) []string {
@@ -35,6 +37,33 @@ func getCitationKeysOfSections(sections []MarkdownSection) []string {
 	}
 
 	return StringSliceRemoveDuplicates(keys)
+}
+
+func applyFootnotesToSections(sections []MarkdownSection, keys []string) []MarkdownSection {
+	return applyFootnotesToSection(MarkdownSection{ Sections: sections }, keys).Sections
+}
+
+func applyFootnotesToSection(section MarkdownSection, keys []string) MarkdownSection {
+	childSectionsTransformed := []MarkdownSection{}
+	for _, childSection := range section.Sections {
+		childSectionsTransformed = append(childSectionsTransformed, applyFootnotesToSection(childSection, keys))
+	}
+
+	return MarkdownSection{
+		Title: applyFootnotesToText(section.Title, keys),
+		Content: applyFootnotesToText(section.Content, keys),
+		Sections: childSectionsTransformed,
+	}
+}
+
+func applyFootnotesToText(text string, keys []string) string {
+	out := text
+	for i, key := range keys {
+		footnote := fmt.Sprintf("[^%d]", i+1)
+		searchKey := fmt.Sprintf("[@%s]", key)
+		out = strings.ReplaceAll(out, searchKey, footnote)
+	}
+	return out
 }
 
 var citationKeyRe = regexp.MustCompile(`(?m)\[@([a-zA-Z0-9]+)\]`)
