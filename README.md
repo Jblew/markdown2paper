@@ -4,7 +4,7 @@ Takes outline, multiple markdown files and *.bib file and makes a final-final-re
 
 
 
-### :fire::fire::fire:Features 
+### :fire::fire::fire: Features 
 
 1. Merges multiple markdown documents into one final version
 2. Uses single `Outline` section of the root document to lay out the final paper
@@ -15,3 +15,11 @@ Takes outline, multiple markdown files and *.bib file and makes a final-final-re
 
 ![Markdown2Paper](doc/img/Markdown2Paper.png)
 
+
+## Installation
+
+```bash
+go get github.com/Jblew/markdown2paper/markdown2paper
+```
+
+Then if you have $GOPATH added to $PATH, the cli should be available.
