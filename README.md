@@ -14,7 +14,7 @@ Takes outline, multiple markdown files and \*.bib file and makes a final-final-r
 ## Installation
 
 ```bash
-go get github.com/Jblew/markdown2paper/markdown2paper
+go get github.com/Jblew/markdown2paper
 ```
 
 Then if you have $GOPATH added to $PATH, the cli should be available.
