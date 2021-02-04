@@ -9,4 +9,4 @@ RUN_CMD="${SRC_DIR}/markdown2paper"
 
 "${BUILD_CMD}"
 
-"${RUN_CMD}" --outline README.md --bib bibliography.bib --out final-final-really-final-v3.md build
+"${RUN_CMD}" build
