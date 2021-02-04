@@ -1,4 +1,4 @@
-module github.com/Jblew/markdown2paper
+module github.com/Jblew/markdown2paper/markdown2paper
 
 go 1.13
 
