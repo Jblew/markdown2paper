@@ -7,34 +7,18 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+var defaultConfigPath string = "markdown2paper.config.yml"
+
 func main() {
   app := &cli.App{
     Name: "build",
 		Usage: "builds ",
-		Flags: []cli.Flag {
-      &cli.StringFlag{
-        Name: "bib",
-        Value: "",
-        Usage: "bibliography file",
-			},
-			&cli.StringFlag{
-        Name: "outline",
-        Value: "",
-        Usage: "markdown file with the outline section",
-			},
-			&cli.StringFlag{
-        Name: "out",
-        Value: "",
-        Usage: "output file",
-      },
-    },
     Action: func(c *cli.Context) error {
-			params := BuildParams{
-				BibFile: c.String("bib"),
-				OutlineFile: c.String("outline"),
-				OutFile: c.String("out"),
-			}
-      return Build(params)
+      config, err := loadConfigFromFile(defaultConfigPath)
+      if err != nil {
+        return err
+      }
+      return Build(config)
 		},
   }
 

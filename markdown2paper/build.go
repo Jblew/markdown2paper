@@ -5,15 +5,8 @@ import (
 	"path/filepath"
 )
 
-// BuildParams — parameters for building
-type BuildParams struct {
-	BibFile string
-	OutlineFile string
-	OutFile string
-}
-
 // Build actually builds the paper
-func Build(params BuildParams) error {
+func Build(params Config) error {
 	outMarkdown := MarkdownSection{Sections: []MarkdownSection{{}}}
 	baseDir := filepath.Dir(params.OutlineFile)
 
