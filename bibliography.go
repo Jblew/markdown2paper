@@ -3,7 +3,6 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
-	"log"
 
 	"github.com/nickng/bibtex"
 )
