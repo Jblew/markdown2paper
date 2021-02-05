@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"path/filepath"
 )
 
@@ -31,7 +30,6 @@ func Build(params Config) error {
 	if err != nil {
 		return err
 	}
-	log.Printf("%+v", bibliography)
 	paperContentsWithBibliography := ProcessPandocReferences(paperContents, bibliography)
 
 	outMarkdown.Sections[0].Sections = paperContentsWithBibliography

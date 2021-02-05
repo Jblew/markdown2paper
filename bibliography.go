@@ -25,10 +25,6 @@ func LoadBibliographyFromFile(path string) (Bibliography, error) {
 		return Bibliography{}, err
 	}
 
-	for _, entry := range bibTex.Entries {
-		log.Printf("%+v ||||| %+v", entry.CiteName, entry.Type)
-	}
-
 	return Bibliography{ bibTex }, nil
 }
 
