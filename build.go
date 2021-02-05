@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"path/filepath"
 )
 
@@ -26,7 +27,12 @@ func Build(params Config) error {
 		return err
 	}
 
-	paperContentsWithBibliography := ProcessPandocReferences(paperContents)
+	bibliography, err := LoadBibliographyFromFile(params.BibFile)
+	if err != nil {
+		return err
+	}
+	log.Printf("%+v", bibliography)
+	paperContentsWithBibliography := ProcessPandocReferences(paperContents, bibliography)
 
 	outMarkdown.Sections[0].Sections = paperContentsWithBibliography
 	outMarkdown.Sections[0].Title = outlineMarkdown.Sections[0].Title

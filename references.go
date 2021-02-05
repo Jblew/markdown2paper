@@ -7,20 +7,20 @@ import (
 )
 
 // ProcessPandocReferences replaces all occurances of pandoc citation keys [@key] with footnotes
-func ProcessPandocReferences(sections []MarkdownSection) []MarkdownSection {
+func ProcessPandocReferences(sections []MarkdownSection, bibliography Bibliography) []MarkdownSection {
 	citationKeys := getCitationKeysOfSections(sections)
 	bibliographyContent := ""
 
 	for i, key := range citationKeys {
-		bibliographyContent += fmt.Sprintf("[^%d]: [@%s]\n\n", (i+1), key)
+		bibliographyContent += fmt.Sprintf("[^%d]: %s\n\n", (i+1), bibliography.FormatMarkdownByKey(key))
 	}
 
 	transformedSections := applyFootnotesToSections(sections, citationKeys)
-	bibliography := MarkdownSection{
+	bibliographySection := MarkdownSection{
 		Title: "Bibliography",
 		Content: bibliographyContent,
 	}
-	return append(transformedSections, bibliography)
+	return append(transformedSections, bibliographySection)
 }
 
 func getCitationKeysOfSections(sections []MarkdownSection) []string {
