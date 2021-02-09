@@ -3,6 +3,7 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
+	"log"
 
 	"github.com/nickng/bibtex"
 )
@@ -40,6 +41,7 @@ func (b *Bibliography) FormatMarkdownByKey(key string) string {
 		doi := entry.Fields["doi"]
 		return fmt.Sprintf("%s [@%s] %s, %s, **%s**, *%s*, https://dx.doi.org/%s", entryType, key, author, year, title, journal, doi)
 	}
+	log.Printf("Warning: citation for key '%s' not found in bibtex file", key)
 	return fmt.Sprintf("[@%s] Citation not found in bibtex file", key)
 }
 
