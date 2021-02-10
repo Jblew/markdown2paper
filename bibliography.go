@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"strings"
 
 	"github.com/nickng/bibtex"
 )
@@ -46,8 +47,9 @@ func (b *Bibliography) FormatMarkdownByKey(key string) string {
 }
 
 func (b *Bibliography) findEntryByKey(key string) *bibtex.BibEntry {
+	keyLowerCase := strings.ToLower(key)
 	for _, entry := range b.bibTex.Entries {
-		if entry.CiteName == key {
+		if strings.ToLower(entry.CiteName) == keyLowerCase {
 			return entry
 		}
 	}
