@@ -49,7 +49,7 @@ Here are the conclusions. Results are similar to [^3] and [^4]
 
 [^3]: article [@Deterding2011Defining] Deterding, Sebastian and Dixon, Dan and Khaled, Rilla and Nacke, Lennart, 2011, **{From game design elements to gamefulness: Defining "gamification"}**, *Proceedings of the 15th International Academic MindTrek Conference: Envisioning Future Media Environments, MindTrek 2011*, https://dx.doi.org/10.1145/2181037.2181040
 
-[^4]: book [@actionablegamification_2015] Chou, Yu-kai, 2015, **{Actionable Gamification}**, *%!s(<nil>)*, https://dx.doi.org/%!s(<nil>)
+[^4]: book [@actionablegamification_2015] Chou, Yu-kai, 2015, **{Actionable Gamification}**, *%!s(<nil>)*, <no doi>
 
 
 
