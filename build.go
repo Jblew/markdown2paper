@@ -89,7 +89,7 @@ func extractMarkdownSection(markdown MarkdownSection, sectionTitle string) (Mark
 	if found == true {
 		return section, nil
 	}
-	return MarkdownSection{}, fmt.Errorf("Section named \"%s\" not found", sectionTitle)
+	return MarkdownSection{}, fmt.Errorf("Section named \"%s\" not found in %s", sectionTitle, markdown.Title)
 }
 
 
