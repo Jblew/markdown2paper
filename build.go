@@ -80,7 +80,11 @@ func extractMarkdownSectionFromFile(path string, sectionTitle string) (MarkdownS
 		return MarkdownSection{}, err
 	}
 
-	return extractMarkdownSection(markdown, sectionTitle)
+	extractedMarkdown, err := extractMarkdownSection(markdown, sectionTitle)
+	if err != nil {
+		return MarkdownSection{}, fmt.Errorf("Failed to extract section \"%s\" from file \"%s\": %+v", sectionTitle, path, err)
+	}
+	return extractedMarkdown, nil
 }
 
 
