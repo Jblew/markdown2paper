@@ -52,7 +52,7 @@ func MarkdownToText(section MarkdownSection, level int) string {
 	}
 
 	if level > 0 && len(section.Sections) == 0 {
-		out += "\n\n"
+		out += "\n\n&nbsp;\n\n"
 	}
 
 	return out
