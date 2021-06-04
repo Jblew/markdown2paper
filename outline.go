@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+	"net/url"
 	"regexp"
 	"strings"
 )
@@ -62,7 +64,12 @@ func makeNewOutlineChild(text string, childPunctors []punctor) OutlineTree {
 		title = submatches[1]
 		link = submatches[2]
 	}
-	return OutlineTree{Title: title, LinkPath: link, Children: parsePunctorsToOutlineTree(childPunctors)}
+	linkDecoded, err := url.QueryUnescape(link)
+	if err != nil {
+		log.Printf("Cannot decode link %s: %+v", link, err)
+		linkDecoded = link
+	}
+	return OutlineTree{Title: title, LinkPath: linkDecoded, Children: parsePunctorsToOutlineTree(childPunctors)}
 }
 
 var punctorRe = regexp.MustCompile(`(?m)^([\t ]*)[\d+-.]+[\t ]?(.*)$`)
