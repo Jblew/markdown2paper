@@ -62,6 +62,8 @@ func applyFootnotesToText(text string, keys []string) string {
 		footnote := fmt.Sprintf("[^%d]", i+1)
 		searchKey := fmt.Sprintf("[@%s]", key)
 		out = strings.ReplaceAll(out, searchKey, footnote)
+		searchKey = fmt.Sprintf("[^@%s]", key)
+		out = strings.ReplaceAll(out, searchKey, footnote)
 	}
 	return out
 }
