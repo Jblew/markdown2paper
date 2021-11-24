@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"strings"
 
 	"github.com/Jblew/bibtex"
@@ -13,22 +14,6 @@ import (
 type Bibliography struct {
 	bibTex *bibtex.BibTex
 }
-
-// LoadBibliographyFromFile loads bibliography from file
-func LoadBibliographyFromFile(path string) (Bibliography, error) {
-	b, err := ioutil.ReadFile(path)
-	if err != nil {
-		return Bibliography{}, err
-	}
-
-	bibTex, err := bibtex.Parse(bytes.NewReader(b))
-	if err != nil {
-		return Bibliography{}, err
-	}
-
-	return Bibliography{ bibTex }, nil
-}
-
 
 // FormatMarkdownByKey formats bibliography entry by key
 func (b *Bibliography) FormatMarkdownByKey(key string) string {
@@ -62,4 +47,34 @@ func (b *Bibliography) findEntryByKey(key string) *bibtex.BibEntry {
 		}
 	}
 	return nil
+}
+
+// LoadBibliographyFromPath loads bibliography from file
+func LoadBibliographyFromPath(path string) (Bibliography, error) {
+	bibliographyBytes, err := readBibtexFromPath(path)
+	if err != nil {
+		return Bibliography{}, err
+	}
+
+	bibTex, err := bibtex.Parse(bytes.NewReader(bibliographyBytes))
+	if err != nil {
+		return Bibliography{}, err
+	}
+
+	return Bibliography{ bibTex }, nil
+}
+
+func readBibtexFromPath(path string) ([]byte, error) {
+	if strings.HasPrefix(path, "http") {
+		return fetchBibtexFromHttp(path)
+	}
+	return ioutil.ReadFile(path)
+}
+
+func fetchBibtexFromHttp(path string) ([]byte, error) {
+	resp, err := http.Get("https://jsonplaceholder.typicode.com/posts")
+	if err != nil {
+		 log.Fatalln(err)
+	}
+	return ioutil.ReadAll(resp.Body)
 }

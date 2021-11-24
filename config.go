@@ -8,7 +8,7 @@ import (
 
 // Config is the config of markdown2paper
 type Config struct {
-	BibFile string `yaml:"bibPath"`
+	BibPath string `yaml:"bibPath"`
 	OutlineFile string `yaml:"outlinePath"`
 	OutFile string `yaml:"outPath"`
 }

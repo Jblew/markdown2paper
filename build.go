@@ -26,7 +26,7 @@ func Build(params Config) error {
 		return err
 	}
 
-	bibliography, err := LoadBibliographyFromFile(params.BibFile)
+	bibliography, err := LoadBibliographyFromPath(params.BibPath)
 	if err != nil {
 		return err
 	}
