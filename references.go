@@ -66,7 +66,7 @@ func applyFootnotesToText(text string, keys []string) string {
 	return out
 }
 
-var citationKeyRe = regexp.MustCompile(`(?m)\[@([^\]]+)\]`)
+var citationKeyRe = regexp.MustCompile(`(?m)\[\^?@([^\]]+)\]`)
 func getCitationKeysFromText(text string) []string {
 	keys := []string{}
 	for _, match := range citationKeyRe.FindAllStringSubmatch(text, -1) {
