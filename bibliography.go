@@ -6,7 +6,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/nickng/bibtex"
+	"github.com/Jblew/bibtex"
 )
 
 // Bibliography is the bibliography of an article
