@@ -72,7 +72,7 @@ func readBibtexFromPath(path string) ([]byte, error) {
 }
 
 func fetchBibtexFromHttp(path string) ([]byte, error) {
-	resp, err := http.Get("https://jsonplaceholder.typicode.com/posts")
+	resp, err := http.Get(path)
 	if err != nil {
 		 log.Fatalln(err)
 	}
