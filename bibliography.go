@@ -56,9 +56,16 @@ func LoadBibliographyFromPath(path string) (Bibliography, error) {
 		return Bibliography{}, err
 	}
 
+	if verbose {
+		log.Printf("Loaded bibtex contents: %v", string(bibliographyBytes))
+	}
+
 	bibTex, err := bibtex.Parse(bytes.NewReader(bibliographyBytes))
 	if err != nil {
 		return Bibliography{}, err
+	}
+	if verbose {
+		log.Printf("Loaded bibtex: %+v", bibTex.Entries)
 	}
 
 	return Bibliography{ bibTex }, nil
@@ -74,7 +81,13 @@ func readBibtexFromPath(path string) ([]byte, error) {
 func fetchBibtexFromHttp(path string) ([]byte, error) {
 	resp, err := http.Get(path)
 	if err != nil {
-		 log.Fatalln(err)
+		if verbose {
+			log.Printf("Failed to fetch bibtex from %s", path)
+		}
+		log.Fatalln(err)
+	}
+	if verbose {
+		log.Printf("Fetched bibtex from %s", path)
 	}
 	return ioutil.ReadAll(resp.Body)
 }

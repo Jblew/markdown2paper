@@ -4,6 +4,8 @@
 
 
 
+&nbsp;
+
 ## Methods
 
 The most common methodology used in our field of research is the one specified by [^1]
@@ -15,15 +17,21 @@ Subsection of the methodology
 
 
 
+&nbsp;
+
 ## Results
 
 ### Initial results
 
 
 
+&nbsp;
+
 ### Round A
 
 
+
+&nbsp;
 
 ### Comparison to other studies
 
@@ -31,15 +39,21 @@ Subsection of the methodology
 
 
 
+&nbsp;
+
 #### After 2000
 
 
+
+&nbsp;
 
 ## Conclusions
 
 Here are the conclusions. Results are similar to [^3] and [^4]
 
 
+
+&nbsp;
 
 ## Bibliography
 
@@ -54,4 +68,6 @@ Here are the conclusions. Results are similar to [^3] and [^4]
 
 
 
+
+&nbsp;
 
