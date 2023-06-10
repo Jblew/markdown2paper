@@ -40,3 +40,13 @@ func StringSliceRemoveDuplicates(s []string) []string {
 	return out
 }
 
+// StringSliceRemoveEmpty removes empty strings
+func StringSliceRemoveEmpty(s []string) []string {
+	out := []string {}
+	for _, item := range s {
+		if item != "" {
+			out = append(out, item)
+		}
+	}
+	return out
+}

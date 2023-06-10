@@ -1,4 +1,5 @@
 package main
+
 import (
 	"bytes"
 	"fmt"
@@ -26,17 +27,26 @@ func (b *Bibliography) FormatMarkdownByKey(key string) string {
 }
 
 func formatBibtexEntry(entry *bibtex.BibEntry) string {
-	entryType := entry.Type
-	author := entry.Fields["author"]
-	year := entry.Fields["year"]
-	title := entry.Fields["title"]
-	journal := entry.Fields["journal"]
-	doiFormatted := "<no doi>"
+	author := "anonymus";
+	if authorField, ok := entry.Fields["author"]; ok {
+		author = strings.ReplaceAll(strings.ReplaceAll(authorField.String(), "{", ""), "}", "")
+	}
+	year := ""
+	if yearField, ok := entry.Fields["year"]; ok {
+		year = yearField.String()
+	}
+	title := fmt.Sprintf("*%s*", entry.Fields["title"])
+	titleNoBrackets := strings.ReplaceAll(strings.ReplaceAll(title, "{", ""), "}", "")
+	journal := "";
+	if journalField, ok := entry.Fields["journal"]; ok {
+		journal = journalField.String()
+	}
+	doiFormatted := ""
 	if doi, ok := entry.Fields["doi"]; ok {
 		doiFormatted = fmt.Sprintf("https://dx.doi.org/%s", doi)
 	}
-	key := entry.CiteName
-	return fmt.Sprintf("%s [@%s] %s, %s, **%s**, *%s*, %s", entryType, key, author, year, title, journal, doiFormatted)
+	elems := []string{author, titleNoBrackets, journal, year, doiFormatted}
+	return strings.Join(StringSliceRemoveEmpty(elems), ", ")
 }
 
 func (b *Bibliography) findEntryByKey(key string) *bibtex.BibEntry {
